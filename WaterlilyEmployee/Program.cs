@@ -1,3 +1,8 @@
+using WaterlilyEmployee.Helpers;
+using WaterlilyEmployee.Models;
+using WaterlilyEmployee.Repositories;
+using WaterlilyEmployee.Services;
+
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
@@ -23,5 +28,12 @@ app.UseAuthorization();
 app.MapControllerRoute(
     name: "default",
     pattern: "{controller=Home}/{action=Index}/{id?}");
+
+
+builder.Services.AddDbContext<WaterlilyEmployeeDbContext>();
+builder.Services.AddScoped<IRepository<Employee>, EmployeeRepository>();
+builder.Services.AddScoped<IEmployeeService, EmployeeService>();
+builder.Services.AddSingleton<CacheHelper>();
+builder.Services.AddMemoryCache();
 
 app.Run();
