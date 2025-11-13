@@ -26,5 +26,10 @@ namespace WaterlilyEmployee.Helpers
             }
             return value;
         }
+
+        public void Remove(string key)
+        {
+            _cache.Remove(key);
+        }
     }
 }

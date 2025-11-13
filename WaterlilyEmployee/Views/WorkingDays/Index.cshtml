@@ -1,0 +1,74 @@
+﻿@{
+    ViewData["Title"] = "Working Days Calculator";
+}
+
+<h2>Working Days Calculator</h2>
+
+<form asp-action="Index" method="post" class="needs-validation" novalidate>
+    <div class="mb-3">
+        <label class="form-label">Start Date</label>
+        <input type="date" name="startDate" id="startDate" class="form-control" required
+               value="@(ViewBag.StartDate ?? "")" />
+        <div class="invalid-feedback">Start Date is required and must be a weekday (Mon-Fri).</div>
+    </div>
+
+    <div class="mb-3">
+        <label class="form-label">End Date</label>
+        <input type="date" name="endDate" id="endDate" class="form-control" required
+               value="@(ViewBag.EndDate ?? "")" />
+        <div class="invalid-feedback">End Date is required and must be after Start Date.</div>
+    </div>
+
+    <button type="submit" class="btn btn-primary">Calculate</button>
+</form>
+
+@if (ViewBag.Result != null)
+{
+    <div class="alert alert-info mt-3">
+        Number of working days: <strong>@ViewBag.Result</strong>
+    </div>
+}
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+    <script>
+        (function () {
+            'use strict';
+            var forms = document.querySelectorAll('.needs-validation');
+
+            Array.prototype.slice.call(forms).forEach(function (form) {
+                form.addEventListener('submit', function (event) {
+                    var startInput = document.getElementById('startDate');
+                    var endInput = document.getElementById('endDate');
+                    var startDate = new Date(startInput.value);
+                    var endDate = new Date(endInput.value);
+                    var valid = true;
+
+                    // Start date must be weekday
+                    if (startDate.getDay() === 0 || startDate.getDay() === 6) {
+                        startInput.classList.add('is-invalid');
+                        valid = false;
+                    } else {
+                        startInput.classList.remove('is-invalid');
+                    }
+
+                    // End date must be after or equal to start date
+                    if (endDate < startDate) {
+                        endInput.classList.add('is-invalid');
+                        valid = false;
+                    } else {
+                        endInput.classList.remove('is-invalid');
+                    }
+
+                    // Standard HTML5 validation
+                    if (!form.checkValidity() || !valid) {
+                        event.preventDefault();
+                        event.stopPropagation();
+                    }
+
+                    form.classList.add('was-validated');
+                }, false);
+            });
+        })();
+    </script>
+}

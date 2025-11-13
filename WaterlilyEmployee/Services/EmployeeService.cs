@@ -27,19 +27,22 @@ namespace WaterlilyEmployee.Services
         public async Task AddEmployeeAsync(Employee e)
         {
             await _repo.AddAsync(e);
-            _cacheHelper.CachedLong("employees_all", () => _repo.GetAllAsync().Result.ToList());
+            //_cacheHelper.CachedLong("employees_all", () => _repo.GetAllAsync().Result.ToList());
+            _cacheHelper.Remove("employees_all");
         }
 
         public async Task UpdateEmployeeAsync(Employee e)
         {
             await _repo.UpdateAsync(e);
-            _cacheHelper.CachedLong("employees_all", () => _repo.GetAllAsync().Result.ToList());
+            //_cacheHelper.CachedLong("employees_all", () => _repo.GetAllAsync().Result.ToList());
+            _cacheHelper.Remove("employees_all");
         }
 
         public async Task DeleteEmployeeAsync(int id)
         {
             await _repo.DeleteAsync(id);
-            _cacheHelper.CachedLong("employees_all", () => _repo.GetAllAsync().Result.ToList());
+            //_cacheHelper.CachedLong("employees_all", () => _repo.GetAllAsync().Result.ToList());
+            _cacheHelper.Remove("employees_all");
         }
     }
 }

@@ -1,3 +1,4 @@
+using Microsoft.EntityFrameworkCore;
 using WaterlilyEmployee.Helpers;
 using WaterlilyEmployee.Models;
 using WaterlilyEmployee.Repositories;
@@ -8,7 +9,20 @@ var builder = WebApplication.CreateBuilder(args);
 // Add services to the container.
 builder.Services.AddControllersWithViews();
 
+builder.Services.AddDbContext<WaterlilyEmployeeDbContext>(options =>
+    options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
+
+builder.Services.AddScoped<IRepository<Employee>, EmployeeRepository>();
+builder.Services.AddScoped<IEmployeeService, EmployeeService>();
+builder.Services.AddScoped<IWorkingDaysService, WorkingDaysService>();
+builder.Services.AddScoped<WorkingDaysRepository>();
+builder.Services.AddSingleton<CacheHelper>();
+builder.Services.AddMemoryCache();
+
+builder.Services.AddControllersWithViews();
+
 var app = builder.Build();
+
 
 // Configure the HTTP request pipeline.
 if (!app.Environment.IsDevelopment())
@@ -27,13 +41,6 @@ app.UseAuthorization();
 
 app.MapControllerRoute(
     name: "default",
-    pattern: "{controller=Home}/{action=Index}/{id?}");
-
-
-builder.Services.AddDbContext<WaterlilyEmployeeDbContext>();
-builder.Services.AddScoped<IRepository<Employee>, EmployeeRepository>();
-builder.Services.AddScoped<IEmployeeService, EmployeeService>();
-builder.Services.AddSingleton<CacheHelper>();
-builder.Services.AddMemoryCache();
+    pattern: "{controller=Employees}/{action=Index}/{id?}");
 
 app.Run();

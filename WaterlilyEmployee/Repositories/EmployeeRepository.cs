@@ -24,7 +24,8 @@ namespace WaterlilyEmployee.Repositories
         {
             //await _context.Employees.FindAsync(id);
             var param = new SqlParameter("@Id", id);
-            return await _context.Employees.FromSqlRaw("EXEC sp_GetEmployeeById @Id", param).FirstOrDefaultAsync();
+            var list = await _context.Employees.FromSqlRaw("EXEC sp_GetEmployeeById @Id", param).ToListAsync();
+            return list.FirstOrDefault();
         }           
 
         public async Task AddAsync(Employee entity)
@@ -37,7 +38,7 @@ namespace WaterlilyEmployee.Repositories
                 new SqlParameter("@Email", entity.Email),
                 new SqlParameter("@JobPosition", entity.JobPosition),
             };
-            await _context.Database.ExecuteSqlRawAsync("EXEC sp_InsertEmployee @Name, @Email, @JobDescription", parameters);
+            await _context.Database.ExecuteSqlRawAsync("EXEC sp_InsertEmployee @Name, @Email, @JobPosition", parameters);
         }
 
         public async Task UpdateAsync(Employee entity)
@@ -51,7 +52,7 @@ namespace WaterlilyEmployee.Repositories
                 new SqlParameter("@Email", entity.Email),
                 new SqlParameter("@JobPosition", entity.JobPosition),
             };
-            await _context.Database.ExecuteSqlRawAsync("EXEC sp_UpdateEmployee @Id, @Name, @Email, @JobDescription", parameters);
+            await _context.Database.ExecuteSqlRawAsync("EXEC sp_UpdateEmployee @Id, @Name, @Email, @JobPosition", parameters);
         }
 
         public async Task DeleteAsync(int id)
