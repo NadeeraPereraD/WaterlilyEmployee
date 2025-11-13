@@ -1,0 +1,30 @@
+﻿# Visual Studio
+.vs/
+*.user
+*.suo
+*.userosscache
+*.sln.docstates
+
+# Build results
+bin/
+obj/
+out/
+
+# ASP.NET Core
+appsettings.*.json
+wwwroot/lib/
+
+# Rider
+.idea/
+
+# Node / NPM
+node_modules/
+npm-debug.log
+yarn-error.log
+
+# Others
+*.log
+*.vsix
+*.nupkg
+*.db
+*.bak
