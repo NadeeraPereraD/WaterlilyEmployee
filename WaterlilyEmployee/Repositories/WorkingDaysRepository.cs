@@ -19,7 +19,10 @@ namespace WaterlilyEmployee.Repositories
 
         public async Task<List<DateTime>> GetPublicHolidaysAsync()
         {
-            return await _context.PublicHolidays.FromSqlRaw("EXEC sp_GetPublicHolidays").Select(h => h.HolidayDate.ToDateTime(TimeOnly.MinValue)).ToListAsync();
+            //return await _context.PublicHolidays.FromSqlRaw("EXEC sp_GetPublicHolidays").Select(h => h.HolidayDate.ToDateTime(TimeOnly.MinValue)).ToListAsync();
+            var holidays = await _context.PublicHolidays.FromSqlRaw("EXEC sp_GetPublicHolidays").ToListAsync();
+
+            return holidays.Select(h => h.HolidayDate.ToDateTime(TimeOnly.MinValue)).ToList();
         }
     }
 }

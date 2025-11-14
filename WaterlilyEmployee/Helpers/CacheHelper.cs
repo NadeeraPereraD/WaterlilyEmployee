@@ -27,6 +27,16 @@ namespace WaterlilyEmployee.Helpers
             return value;
         }
 
+        public async Task<T> CachedLongAsync<T>(string key, Func<Task<T>> factory)
+        {
+            if (!_cache.TryGetValue(key, out T value))
+            {
+                value = await factory();
+                _cache.Set(key, value);
+            }
+            return value;
+        }
+
         public void Remove(string key)
         {
             _cache.Remove(key);

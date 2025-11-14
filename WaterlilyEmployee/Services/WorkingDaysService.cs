@@ -22,7 +22,11 @@ namespace WaterlilyEmployee.Services
             if (end < start)
                 throw new ArgumentException("End date must be same or after start date.");
 
-            var holidays = _cache.CachedLong("public_holidays", () => _repo.GetPublicHolidaysAsync().Result);
+            //var holidays = _cache.CachedLong("public_holidays", () => _repo.GetPublicHolidaysAsync().Result);
+
+            var holidays = await _cache.CachedLongAsync("public_holidays", () => _repo.GetPublicHolidaysAsync());
+
+            var holidayDates = new HashSet<DateTime>(holidays.Select(d => d.Date));
 
             int workingDays = 0;
             for (var date = start.Date; date <= end.Date; date = date.AddDays(1))
